@@ -1,4 +1,3 @@
-//import PropTypes from 'prop-types'
 import React, { Component } from 'react';
 import { GlobalStyle } from './GlobalStyle';
 import { Layout } from './Layout/Layout';
@@ -27,6 +26,19 @@ export default class App extends Component {
     contacts: initialContacts,
     filter: '',
   };
+
+    componentDidMount() {
+    const contactsFromLS = localStorage.getItem('contacts');
+    const parsedContacts = JSON.parse(contactsFromLS);
+    if (!parsedContacts) return;
+    this.setState({ contacts: parsedContacts });
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.contacts !== prevState.contacts) {
+      localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
+    }
+  }
 
   addContact = newContact => {
     this.state.contacts.filter(
